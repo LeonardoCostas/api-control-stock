@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebApipractica")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+052c2c325d52cf9fb77b5e197694c28202a1eca2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+45c8a3b86cab196d2347fa43ebaf922aa6c66ebb")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebApipractica")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebApipractica")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

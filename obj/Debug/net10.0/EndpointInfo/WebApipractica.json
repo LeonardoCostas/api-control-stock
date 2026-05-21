@@ -464,6 +464,11 @@
         "additionalProperties": false
       },
       "CreateProductoDto": {
+        "required": [
+          "codigo",
+          "nombre",
+          "stock"
+        ],
         "type": "object",
         "properties": {
           "codigo": {

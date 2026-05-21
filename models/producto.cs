@@ -4,23 +4,23 @@
     {
         public int Id { get; set; }
 
-        public string Codigo { get; set; }
+        public required string Codigo { get; set; }
 
-        public string Nombre { get; set; }
+        public required string Nombre { get; set; }
 
-        public int Stock { get; set; }
+        public required int Stock { get; set; }
 
 
         // Foreign Keys
-        public int AlmacenId { get; set; }
+        public required int AlmacenId { get; set; }
 
-        public int MarcaId { get; set; }
+        public required int MarcaId { get; set; }
 
-        public int TipoProductoId { get; set; }
+        public required int TipoProductoId { get; set; }
 
 
         // Navigation Properties
-        public Almacen Almacen { get; set; }
+        public Almacen  Almacen { get; set; }
 
         public Marca Marca { get; set; }
 
