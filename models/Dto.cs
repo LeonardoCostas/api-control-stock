@@ -1,6 +1,6 @@
 ﻿public class CreateProductoDto
 {
-    public string Codigo { get; set; }
+    public re string Codigo { get; set; }
     public string Nombre { get; set; }
     public int Stock { get; set; }
 
