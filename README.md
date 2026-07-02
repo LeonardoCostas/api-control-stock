@@ -1,47 +1,71 @@
 # Control de Stock Zamponi
 
-## Descripción
-Sistema de gestión de stock para bicicletería.
+MVP de backend y pagina de presentacion para Zamponi, una empresa mayorista de bicicletas, partes y repuestos con operacion de depositos, entrada de mercaderia por camion y reparto diario.
 
-Permite administrar:
-- Productos
-- Marcas
-- Tipos de productos
-- Almacenes
+## Que incluye
 
-## Tecnologías
-- C#
-- ASP.NET Core Web API
-- Entity Framework Core
-- SQL Server
-- Swagger
+- API REST con ASP.NET Core.
+- Persistencia con Entity Framework Core y SQL Server LocalDB.
+- CRUD de productos, marcas, tipos de producto y almacenes.
+- Entradas de stock por deposito.
+- Salidas de stock para reparto, ventas o preparacion de pedidos.
+- Transferencias entre depositos.
+- Reportes de resumen y productos con stock bajo.
+- Pagina web inicial servida desde `wwwroot`.
+- Swagger para probar la API.
 
-## Funcionalidades actuales
-- CRUD de productos
-- CRUD de marcas
-- CRUD de almacenes
-- Relaciones entre tablas
-- API REST
-- Persistencia con SQL Server
+## Endpoints principales
 
-## Funcionalidades futuras
-- Frontend interactivo
-- Login administrador
-- Carga de imágenes
-- Control de movimientos de stock
-- Dashboard
+- `GET /api/productos`
+- `POST /api/productos`
+- `POST /api/movimientos-stock/entrada`
+- `POST /api/movimientos-stock/salida`
+- `POST /api/movimientos-stock/transferencia`
+- `GET /api/reportes/resumen`
+- `GET /api/reportes/stock-bajo?minimo=5`
 
-## Base de datos
-Relación:
-- Un almacén tiene muchos productos
-- Un producto pertenece a una marca
-- Un producto pertenece a un tipo
+## Ejemplo de entrada de stock
 
-## Cómo ejecutar
-1. Clonar repositorio
-2. Configurar connection string
-3. Ejecutar migraciones
+```json
+{
+  "codigoProducto": "CAD-116",
+  "almacenId": 1,
+  "cantidad": 20,
+  "referencia": "Camion proveedor Shimano",
+  "observacion": "Ingreso a deposito principal"
+}
+```
+
+## Ejemplo de transferencia
+
+```json
+{
+  "codigoProducto": "CAD-116",
+  "almacenOrigenId": 1,
+  "almacenDestinoId": 2,
+  "cantidad": 6,
+  "transporte": "Reparto diario",
+  "observacion": "Reposicion para mostrador"
+}
+```
+
+## Como ejecutar
+
+1. Clonar el repositorio.
+2. Revisar el connection string en `appsettings.json`.
+3. Crear o actualizar la base con Entity Framework.
+4. Ejecutar el proyecto.
+5. Abrir `/swagger` para probar la API o `/` para ver la pagina de presentacion.
 
 ```bash
-Add-Migration InitialCreate
-Update-Database
+dotnet ef database update
+dotnet run
+```
+
+## Proximos pasos sugeridos
+
+- Login con roles para administracion, deposito y reparto.
+- Historial persistente de movimientos con usuario, fecha y comprobante.
+- Imagen por producto y carga por codigo de barras.
+- Pedidos de clientes mayoristas.
+- Dashboard con ventas, faltantes y reposicion sugerida.
