@@ -47,12 +47,51 @@ namespace WebApipractica.Controllers
                 .Include(p => p.Almacen)
                 .Include(p => p.Marca)
                 .Include(p => p.TipoProducto)
-                .FirstOrDefaultAsync(p => p.Codigo == codigo);
+                .FirstOrDefaultAsync(p => p.Codigo.ToUpper() == codigo.Trim().ToUpper());
 
             if (producto == null)
                 return NotFound();
 
             return Ok(producto);
+        }
+
+        // GET: api/productos/buscar?texto=CAD-116
+        [HttpGet("buscar")]
+        public async Task<IActionResult> BuscarProductos([FromQuery] string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return BadRequest("Ingrese un codigo, nombre, marca o categoria.");
+
+            var busqueda = texto.Trim().ToUpper();
+
+            var productos = await _context.Productos
+                .Include(p => p.Almacen)
+                .Include(p => p.Marca)
+                .Include(p => p.TipoProducto)
+                .Where(p =>
+                    p.Codigo.ToUpper().Contains(busqueda) ||
+                    p.Nombre.ToUpper().Contains(busqueda) ||
+                    p.Marca.Name.ToUpper().Contains(busqueda) ||
+                    p.TipoProducto.Nombre.ToUpper().Contains(busqueda))
+                .OrderByDescending(p => p.Codigo.ToUpper() == busqueda)
+                .ThenBy(p => p.Codigo)
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Codigo,
+                    p.Nombre,
+                    p.Stock,
+                    AlmacenId = p.AlmacenId,
+                    MarcaId = p.MarcaId,
+                    TipoProductoId = p.TipoProductoId,
+                    Almacen = p.Almacen.Nombre,
+                    Marca = p.Marca.Name,
+                    TipoProducto = p.TipoProducto.Nombre
+                })
+                .Take(25)
+                .ToListAsync();
+
+            return Ok(productos);
         }
 
         // POST: api/productos

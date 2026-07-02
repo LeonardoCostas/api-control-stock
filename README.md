@@ -12,6 +12,9 @@ MVP de backend y pagina de presentacion para Zamponi, una empresa mayorista de b
 - Transferencias entre depositos.
 - Reportes de resumen y productos con stock bajo.
 - Pagina web inicial servida desde `wwwroot`.
+- Panel administrador en `wwwroot/admin.html`.
+- Buscador operativo por codigo, nombre, marca o categoria.
+- Datos demo para mostrar productos mayoristas sin cargar una base completa.
 - Swagger para probar la API.
 
 ## Endpoints principales
@@ -23,6 +26,8 @@ MVP de backend y pagina de presentacion para Zamponi, una empresa mayorista de b
 - `POST /api/movimientos-stock/transferencia`
 - `GET /api/reportes/resumen`
 - `GET /api/reportes/stock-bajo?minimo=5`
+- `GET /api/productos/buscar?texto=CAD-116`
+- `POST /api/datos-demo/seed`
 
 ## Ejemplo de entrada de stock
 
@@ -56,6 +61,7 @@ MVP de backend y pagina de presentacion para Zamponi, una empresa mayorista de b
 3. Crear o actualizar la base con Entity Framework.
 4. Ejecutar el proyecto.
 5. Abrir `/swagger` para probar la API o `/` para ver la pagina de presentacion.
+6. Abrir `/admin.html` para usar el panel administrador.
 
 ```bash
 dotnet ef database update

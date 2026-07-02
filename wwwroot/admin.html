@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Zamponi Admin | Productos y stock</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <a class="admin-brand" href="/">
+            <span>Z</span>
+            <strong>Zamponi Admin</strong>
+        </a>
+        <nav>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#busqueda">Buscar codigo</a>
+            <a href="#productos">Productos</a>
+            <a href="#movimientos">Movimientos</a>
+        </nav>
+        <button class="ghost-button" id="seedDemoButton" type="button">Cargar demo</button>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-top">
+            <div>
+                <p class="eyebrow">Panel operativo</p>
+                <h1>Productos, codigos y stock mayorista.</h1>
+            </div>
+            <a class="public-link" href="/">Ver web</a>
+        </header>
+
+        <section class="dashboard" id="dashboard">
+            <article class="stat-card">
+                <span>Total productos</span>
+                <strong id="totalProducts">0</strong>
+            </article>
+            <article class="stat-card">
+                <span>Unidades disponibles</span>
+                <strong id="totalUnits">0</strong>
+            </article>
+            <article class="stat-card warning">
+                <span>Stock bajo</span>
+                <strong id="lowStock">0</strong>
+            </article>
+            <article class="stat-card">
+                <span>Depositos</span>
+                <strong id="warehouses">0</strong>
+            </article>
+        </section>
+
+        <section class="workspace-grid">
+            <article class="panel search-panel" id="busqueda">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Busqueda principal</p>
+                        <h2>Buscar por codigo</h2>
+                    </div>
+                    <span class="live-pill">Codigo primero</span>
+                </div>
+                <form class="search-box" id="searchForm">
+                    <input id="searchInput" name="searchInput" placeholder="Ej: CAD-116-SHI, PUN-ERG, caramanola" autocomplete="off">
+                    <button type="submit">Buscar</button>
+                </form>
+                <div class="result-card" id="searchResult">
+                    <p>Ingresá un codigo o parte del nombre para ubicar productos al instante.</p>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Alta rapida</p>
+                        <h2>Nuevo producto</h2>
+                    </div>
+                </div>
+                <form class="product-form" id="productForm">
+                    <label>Codigo<input name="codigo" required placeholder="CAR-750-TRA"></label>
+                    <label>Nombre<input name="nombre" required placeholder="Caramanola transparente 750 ml"></label>
+                    <label>Stock inicial<input name="stock" required type="number" min="0" value="0"></label>
+                    <label>Deposito<select name="almacenId" required></select></label>
+                    <label>Marca<select name="marcaId" required></select></label>
+                    <label>Categoria<select name="tipoProductoId" required></select></label>
+                    <button class="full-button" type="submit">Guardar producto</button>
+                </form>
+            </article>
+        </section>
+
+        <section class="panel table-panel" id="productos">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Catalogo interno</p>
+                    <h2>Productos cargados</h2>
+                </div>
+                <div class="filters">
+                    <select id="categoryFilter">
+                        <option value="">Todas las categorias</option>
+                    </select>
+                    <select id="warehouseFilter">
+                        <option value="">Todos los depositos</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Producto</th>
+                            <th>Categoria</th>
+                            <th>Marca</th>
+                            <th>Deposito</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="workspace-grid" id="movimientos">
+            <article class="panel">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Entradas y salidas</p>
+                        <h2>Movimiento por codigo</h2>
+                    </div>
+                </div>
+                <form class="movement-form" id="movementForm">
+                    <label>Tipo<select name="tipo"><option value="entrada">Entrada</option><option value="salida">Salida</option></select></label>
+                    <label>Codigo<input name="codigoProducto" required placeholder="CAD-116-SHI"></label>
+                    <label>Deposito<select name="almacenId" required></select></label>
+                    <label>Cantidad<input name="cantidad" required type="number" min="1" value="1"></label>
+                    <label>Referencia<input name="referencia" placeholder="Camion, pedido, mostrador"></label>
+                    <label>Observacion<input name="observacion" placeholder="Detalle opcional"></label>
+                    <button class="full-button" type="submit">Registrar movimiento</button>
+                </form>
+            </article>
+
+            <article class="panel activity-panel">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Actividad</p>
+                        <h2>Ultimas acciones</h2>
+                    </div>
+                </div>
+                <div class="activity-list" id="activityList"></div>
+            </article>
+        </section>
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>
