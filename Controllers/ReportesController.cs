@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WebApipractica.contex;
 
 namespace WebApipractica.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/reportes")]
     public class ReportesController : ControllerBase
     {

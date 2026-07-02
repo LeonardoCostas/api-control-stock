@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApipractica.contex;
 using WebApipractica.models;
@@ -6,6 +7,7 @@ using WebApipractica.models;
 namespace WebApipractica.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class MarcasController : ControllerBase
     {
@@ -16,69 +18,53 @@ namespace WebApipractica.Controllers
             _context = context;
         }
 
-        // GET: api/marcas
         [HttpGet]
         public async Task<IActionResult> GetMarcas()
         {
-            var marcas = await _context.Marcas.ToListAsync();
-
-            return Ok(marcas);
+            return Ok(await _context.Marcas.ToListAsync());
         }
 
-        // GET: api/marcas/1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMarca(int id)
         {
             var marca = await _context.Marcas.FindAsync(id);
 
             if (marca == null)
-            {
                 return NotFound();
-            }
 
             return Ok(marca);
         }
 
-        // POST: api/marcas
         [HttpPost]
         public async Task<IActionResult> CrearMarca(Marca marca)
         {
             _context.Marcas.Add(marca);
-
             await _context.SaveChangesAsync();
 
             return Ok(marca);
         }
 
-        // PUT: api/marcas/1
         [HttpPut("{id}")]
         public async Task<IActionResult> EditarMarca(int id, Marca marca)
         {
             if (id != marca.Id)
-            {
                 return BadRequest();
-            }
 
             _context.Entry(marca).State = EntityState.Modified;
-
             await _context.SaveChangesAsync();
 
             return Ok(marca);
         }
 
-        // DELETE: api/marcas/1
         [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarMarca(int id)
         {
             var marca = await _context.Marcas.FindAsync(id);
 
             if (marca == null)
-            {
                 return NotFound();
-            }
 
             _context.Marcas.Remove(marca);
-
             await _context.SaveChangesAsync();
 
             return Ok();

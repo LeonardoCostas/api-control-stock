@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApipractica.contex;
@@ -6,6 +7,7 @@ using WebApipractica.models;
 namespace WebApipractica.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class TipoProductosController : ControllerBase
     {
@@ -26,7 +28,6 @@ namespace WebApipractica.Controllers
         public async Task<IActionResult> CrearTipo(TipoProducto tipo)
         {
             _context.TipoProducto.Add(tipo);
-
             await _context.SaveChangesAsync();
 
             return Ok(tipo);

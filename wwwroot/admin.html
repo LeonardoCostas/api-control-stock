@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
+    <section class="login-screen" id="loginScreen">
+        <form class="login-card" id="loginForm">
+            <span class="login-logo">Z</span>
+            <p class="eyebrow">Acceso interno</p>
+            <h1>Zamponi Admin</h1>
+            <p>Panel protegido para productos, stock y movimientos.</p>
+            <label>Usuario<input name="username" autocomplete="username" value="admin" required></label>
+            <label>Contrasena<input name="password" type="password" autocomplete="current-password" value="zamponi2026" required></label>
+            <button class="full-button" type="submit">Ingresar</button>
+            <small id="loginMessage">Demo: admin / zamponi2026</small>
+        </form>
+    </section>
+
     <aside class="sidebar">
         <a class="admin-brand" href="/">
             <span>Z</span>
@@ -18,6 +31,7 @@
             <a href="#productos">Productos</a>
             <a href="#movimientos">Movimientos</a>
         </nav>
+        <button class="ghost-button" id="logoutButton" type="button">Cerrar sesion</button>
         <button class="ghost-button" id="seedDemoButton" type="button">Cargar demo</button>
     </aside>
 

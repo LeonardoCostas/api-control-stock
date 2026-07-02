@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WebApipractica.contex;
 using WebApipractica.models;
@@ -108,6 +109,7 @@ namespace WebApipractica.Controllers
         }
 
         // POST: api/productos
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CrearProducto(CreateProductoDto dto)
         {
@@ -144,6 +146,7 @@ namespace WebApipractica.Controllers
         }
 
         // PUT: api/productos/1
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditarProducto(int id, UpdateProductoDto dto)
         {
@@ -178,6 +181,7 @@ namespace WebApipractica.Controllers
         }
 
         // PATCH: api/productos/1/desactivar
+        [Authorize]
         [HttpPatch("{id}/desactivar")]
         public async Task<IActionResult> DesactivarProducto(int id)
         {
@@ -193,6 +197,7 @@ namespace WebApipractica.Controllers
         }
 
         // DELETE: api/productos/1
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarProducto(int id)
         {

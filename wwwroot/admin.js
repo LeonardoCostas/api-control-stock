@@ -15,6 +15,7 @@ const demoLookups = {
 
 const state = {
     apiOnline: true,
+    token: localStorage.getItem("zamponiAdminToken") || "",
     products: [],
     almacenes: [],
     marcas: [],
@@ -26,10 +27,18 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 async function api(path, options = {}) {
+    const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+    if (state.token) headers.Authorization = `Bearer ${state.token}`;
+
     const response = await fetch(path, {
-        headers: { "Content-Type": "application/json" },
-        ...options
+        ...options,
+        headers
     });
+
+    if (response.status === 401) {
+        showLogin("La sesion expiro o falta iniciar sesion.");
+        throw new Error("No autorizado.");
+    }
 
     if (!response.ok) {
         const text = await response.text();
@@ -41,6 +50,11 @@ async function api(path, options = {}) {
 }
 
 async function loadData() {
+    if (!state.token && location.protocol !== "file:") {
+        showLogin();
+        return;
+    }
+
     try {
         const [products, almacenes, marcas, tipos] = await Promise.all([
             api("/api/productos"),
@@ -64,6 +78,17 @@ async function loadData() {
     }
 
     renderAll();
+}
+
+function showLogin(message = "Demo: admin / zamponi2026") {
+    $("#loginMessage").textContent = message;
+    $("#loginScreen").classList.add("is-visible");
+    document.body.classList.add("locked");
+}
+
+function hideLogin() {
+    $("#loginScreen").classList.remove("is-visible");
+    document.body.classList.remove("locked");
 }
 
 function normalizeProducts(products) {
@@ -354,7 +379,46 @@ $("#seedDemoButton").addEventListener("click", async () => {
     }
 });
 
+$("#loginForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(event.currentTarget));
+
+    try {
+        const result = await api("/api/auth/login", {
+            method: "POST",
+            body: JSON.stringify({ username: data.username, password: data.password })
+        });
+
+        state.token = result.token ?? result.Token;
+        localStorage.setItem("zamponiAdminToken", state.token);
+        hideLogin();
+        await loadData();
+        addActivity("Sesion iniciada", `Usuario ${result.username ?? result.Username}`);
+        renderActivities();
+    } catch (error) {
+        if (location.protocol === "file:") {
+            state.token = "demo";
+            localStorage.setItem("zamponiAdminToken", state.token);
+            hideLogin();
+            await loadData();
+            return;
+        }
+
+        $("#loginMessage").textContent = error.message;
+    }
+});
+
+$("#logoutButton").addEventListener("click", () => {
+    state.token = "";
+    localStorage.removeItem("zamponiAdminToken");
+    showLogin("Sesion cerrada.");
+});
+
 $("#categoryFilter").addEventListener("change", renderProducts);
 $("#warehouseFilter").addEventListener("change", renderProducts);
 
-loadData();
+if (state.token || location.protocol === "file:") {
+    loadData();
+} else {
+    showLogin();
+}

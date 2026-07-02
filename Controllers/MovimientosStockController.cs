@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using WebApipractica.contex;
 using WebApipractica.models;
@@ -6,6 +7,7 @@ using WebApipractica.models;
 namespace WebApipractica.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/movimientos-stock")]
     public class MovimientosStockController : ControllerBase
     {
