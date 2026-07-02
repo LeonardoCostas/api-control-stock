@@ -14,6 +14,13 @@ namespace WebApipractica.contex
         public DbSet<Almacen> Almacenes { get; set; }
         public DbSet<Marca> Marcas { get; set; }
         public DbSet<TipoProducto> TipoProducto { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Producto>()
+                .Property(producto => producto.PrecioMayorista)
+                .HasColumnType("decimal(18,2)");
+        }
     }
 
 }

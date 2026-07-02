@@ -1,10 +1,10 @@
 const demoProducts = [
-    { id: 1, codigo: "CAD-116-SHI", nombre: "Cadena Shimano 116 eslabones", stock: 42, almacenId: 1, marcaId: 1, tipoProductoId: 1, almacen: "Deposito Barracas", marca: "Shimano", tipoProducto: "Transmision" },
-    { id: 2, codigo: "PUN-ERG-NEG", nombre: "Punos ergonomicos negros", stock: 96, almacenId: 1, marcaId: 2, tipoProductoId: 4, almacen: "Deposito Barracas", marca: "Zamponi", tipoProducto: "Accesorios" },
-    { id: 3, codigo: "CAR-750-TRA", nombre: "Caramanola transparente 750 ml", stock: 130, almacenId: 1, marcaId: 2, tipoProductoId: 4, almacen: "Deposito Barracas", marca: "Zamponi", tipoProducto: "Accesorios" },
-    { id: 4, codigo: "BOT-ALU-LAT", nombre: "Porta botella aluminio lateral", stock: 54, almacenId: 2, marcaId: 2, tipoProductoId: 4, almacen: "Deposito Reparto", marca: "Zamponi", tipoProducto: "Accesorios" },
-    { id: 5, codigo: "CAM-26-VAL", nombre: "Camara 26 valvula auto", stock: 8, almacenId: 2, marcaId: 2, tipoProductoId: 3, almacen: "Deposito Reparto", marca: "Zamponi", tipoProducto: "Ruedas" },
-    { id: 6, codigo: "PAS-DIS-ORG", nombre: "Pastillas de freno organicas", stock: 6, almacenId: 2, marcaId: 4, tipoProductoId: 2, almacen: "Deposito Reparto", marca: "Promax", tipoProducto: "Frenos" }
+    { id: 1, codigo: "CAD-116-SHI", nombre: "Cadena Shimano 116 eslabones", stock: 42, stockMinimo: 12, precioMayorista: 8200, imagenUrl: "https://images.unsplash.com/photo-1637289031856-9625abbba63f?auto=format&fit=crop&w=600&q=80", activo: true, almacenId: 1, marcaId: 1, tipoProductoId: 1, almacen: "Deposito Barracas", marca: "Shimano", tipoProducto: "Transmision" },
+    { id: 2, codigo: "PUN-ERG-NEG", nombre: "Punos ergonomicos negros", stock: 96, stockMinimo: 24, precioMayorista: 2100, imagenUrl: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80", activo: true, almacenId: 1, marcaId: 2, tipoProductoId: 4, almacen: "Deposito Barracas", marca: "Zamponi", tipoProducto: "Accesorios" },
+    { id: 3, codigo: "CAR-750-TRA", nombre: "Caramanola transparente 750 ml", stock: 130, stockMinimo: 30, precioMayorista: 1800, imagenUrl: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80", activo: true, almacenId: 1, marcaId: 2, tipoProductoId: 4, almacen: "Deposito Barracas", marca: "Zamponi", tipoProducto: "Accesorios" },
+    { id: 4, codigo: "BOT-ALU-LAT", nombre: "Porta botella aluminio lateral", stock: 54, stockMinimo: 20, precioMayorista: 2600, imagenUrl: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80", activo: true, almacenId: 2, marcaId: 2, tipoProductoId: 4, almacen: "Deposito Reparto", marca: "Zamponi", tipoProducto: "Accesorios" },
+    { id: 5, codigo: "CAM-26-VAL", nombre: "Camara 26 valvula auto", stock: 8, stockMinimo: 15, precioMayorista: 2300, imagenUrl: "https://images.unsplash.com/photo-1529422643029-d4585747aaf2?auto=format&fit=crop&w=600&q=80", activo: true, almacenId: 2, marcaId: 2, tipoProductoId: 3, almacen: "Deposito Reparto", marca: "Zamponi", tipoProducto: "Ruedas" },
+    { id: 6, codigo: "PAS-DIS-ORG", nombre: "Pastillas de freno organicas", stock: 6, stockMinimo: 10, precioMayorista: 3100, imagenUrl: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&w=600&q=80", activo: true, almacenId: 2, marcaId: 4, tipoProductoId: 2, almacen: "Deposito Reparto", marca: "Promax", tipoProducto: "Frenos" }
 ];
 
 const demoLookups = {
@@ -72,6 +72,10 @@ function normalizeProducts(products) {
         codigo: product.codigo ?? product.Codigo,
         nombre: product.nombre ?? product.Nombre,
         stock: product.stock ?? product.Stock,
+        precioMayorista: product.precioMayorista ?? product.PrecioMayorista ?? 0,
+        stockMinimo: product.stockMinimo ?? product.StockMinimo ?? 5,
+        imagenUrl: product.imagenUrl ?? product.ImagenUrl ?? "",
+        activo: product.activo ?? product.Activo ?? true,
         almacen: product.almacen ?? product.Almacen,
         marca: product.marca ?? product.Marca,
         tipoProducto: product.tipoProducto ?? product.TipoProducto,
@@ -107,10 +111,11 @@ function fillSelects() {
 
 function renderDashboard() {
     const totalUnits = state.products.reduce((sum, product) => sum + Number(product.stock || 0), 0);
-    const lowStock = state.products.filter((product) => Number(product.stock || 0) <= 10).length;
+    const activeProducts = state.products.filter((product) => product.activo !== false);
+    const lowStock = activeProducts.filter((product) => Number(product.stock || 0) <= Number(product.stockMinimo || 0)).length;
     const warehouses = new Set(state.products.map((product) => product.almacen)).size || state.almacenes.length;
 
-    $("#totalProducts").textContent = state.products.length;
+    $("#totalProducts").textContent = activeProducts.length;
     $("#totalUnits").textContent = totalUnits;
     $("#lowStock").textContent = lowStock;
     $("#warehouses").textContent = warehouses;
@@ -122,19 +127,36 @@ function renderProducts() {
     const filtered = state.products.filter((product) => {
         const categoryOk = !category || product.tipoProducto === category;
         const warehouseOk = !warehouse || product.almacen === warehouse;
-        return categoryOk && warehouseOk;
+        return product.activo !== false && categoryOk && warehouseOk;
     });
 
     $("#productsTable").innerHTML = filtered.map((product) => `
         <tr>
             <td><code>${product.codigo}</code></td>
-            <td>${product.nombre}</td>
+            <td>
+                <div class="product-cell">
+                    <img class="product-thumb" src="${product.imagenUrl || "assets/zamponi.jpeg"}" alt="">
+                    <span>${product.nombre}</span>
+                </div>
+            </td>
             <td>${product.tipoProducto}</td>
             <td>${product.marca}</td>
             <td>${product.almacen}</td>
-            <td><span class="stock-badge ${Number(product.stock) <= 10 ? "low" : ""}">${product.stock}</span></td>
+            <td>${formatMoney(product.precioMayorista)}</td>
+            <td>${product.stockMinimo}</td>
+            <td><span class="stock-badge ${Number(product.stock) <= Number(product.stockMinimo) ? "low" : ""}">${product.stock}</span></td>
+            <td>
+                <div class="row-actions">
+                    <button class="icon-button" type="button" data-action="edit" data-id="${product.id}">Editar</button>
+                    <button class="icon-button danger" type="button" data-action="deactivate" data-id="${product.id}">Desactivar</button>
+                </div>
+            </td>
         </tr>
     `).join("");
+}
+
+function formatMoney(value) {
+    return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(Number(value || 0));
 }
 
 function renderActivities() {
@@ -159,7 +181,7 @@ function renderSearchResult(results) {
     $("#searchResult").innerHTML = results.slice(0, 5).map((product) => `
         <div class="activity-item">
             <strong><code>${product.codigo}</code> · ${product.nombre}</strong>
-            ${product.tipoProducto} · ${product.marca} · ${product.almacen} · Stock: ${product.stock}
+            ${product.tipoProducto} · ${product.marca} · ${product.almacen} · ${formatMoney(product.precioMayorista)} · Stock: ${product.stock}
         </div>
     `).join("");
 }
@@ -189,30 +211,101 @@ $("#productForm").addEventListener("submit", async (event) => {
         codigo: data.codigo.trim().toUpperCase(),
         nombre: data.nombre.trim(),
         stock: Number(data.stock),
+        stockMinimo: Number(data.stockMinimo),
+        precioMayorista: Number(data.precioMayorista),
+        imagenUrl: data.imagenUrl.trim(),
+        activo: data.activo === "true",
         almacenId: Number(data.almacenId),
         marcaId: Number(data.marcaId),
         tipoProductoId: Number(data.tipoProductoId)
     };
+    const id = Number(data.id);
 
     try {
         if (state.apiOnline) {
-            await api("/api/productos", { method: "POST", body: JSON.stringify(payload) });
+            await api(id ? `/api/productos/${id}` : "/api/productos", { method: id ? "PUT" : "POST", body: JSON.stringify(payload) });
             await loadData();
         } else {
             const almacen = state.almacenes.find((item) => item.id === payload.almacenId);
             const marca = state.marcas.find((item) => item.id === payload.marcaId);
             const tipo = state.tipos.find((item) => item.id === payload.tipoProductoId);
-            state.products.unshift({ id: Date.now(), ...payload, almacen: almacen.nombre, marca: marca.name, tipoProducto: tipo.nombre });
+            const updatedProduct = { id: id || Date.now(), ...payload, almacen: almacen.nombre, marca: marca.name, tipoProducto: tipo.nombre };
+            if (id) {
+                state.products = state.products.map((product) => product.id === id ? updatedProduct : product);
+            } else {
+                state.products.unshift(updatedProduct);
+            }
             renderAll();
         }
 
-        addActivity("Producto cargado", `${payload.codigo} · ${payload.nombre}`);
-        event.currentTarget.reset();
+        addActivity(id ? "Producto editado" : "Producto cargado", `${payload.codigo} · ${payload.nombre}`);
+        resetProductForm();
         renderActivities();
     } catch (error) {
         alert(error.message);
     }
 });
+
+$("#productsTable").addEventListener("click", async (event) => {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
+
+    const id = Number(button.dataset.id);
+    const product = state.products.find((item) => item.id === id);
+    if (!product) return;
+
+    if (button.dataset.action === "edit") {
+        fillProductForm(product);
+        document.querySelector("#productForm").scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+    }
+
+    if (!confirm(`Desactivar ${product.codigo}?`)) return;
+
+    try {
+        if (state.apiOnline) {
+            await api(`/api/productos/${id}/desactivar`, { method: "PATCH" });
+            await loadData();
+        } else {
+            product.activo = false;
+            renderAll();
+        }
+
+        addActivity("Producto desactivado", `${product.codigo} · ${product.nombre}`);
+        renderActivities();
+    } catch (error) {
+        alert(error.message);
+    }
+});
+
+$("#cancelEditButton").addEventListener("click", resetProductForm);
+
+function fillProductForm(product) {
+    const form = $("#productForm");
+    form.elements.id.value = product.id;
+    form.elements.codigo.value = product.codigo;
+    form.elements.nombre.value = product.nombre;
+    form.elements.stock.value = product.stock;
+    form.elements.stockMinimo.value = product.stockMinimo;
+    form.elements.precioMayorista.value = product.precioMayorista;
+    form.elements.imagenUrl.value = product.imagenUrl || "";
+    form.elements.almacenId.value = product.almacenId;
+    form.elements.marcaId.value = product.marcaId;
+    form.elements.tipoProductoId.value = product.tipoProductoId;
+    form.elements.activo.value = String(product.activo !== false);
+    $("#saveProductButton").textContent = "Actualizar producto";
+    $("#cancelEditButton").hidden = false;
+}
+
+function resetProductForm() {
+    $("#productForm").reset();
+    $("#productForm").elements.id.value = "";
+    $("#productForm").elements.stock.value = 0;
+    $("#productForm").elements.stockMinimo.value = 5;
+    $("#productForm").elements.precioMayorista.value = 0;
+    $("#saveProductButton").textContent = "Guardar producto";
+    $("#cancelEditButton").hidden = true;
+}
 
 $("#movementForm").addEventListener("submit", async (event) => {
     event.preventDefault();

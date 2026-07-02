@@ -67,11 +67,17 @@ namespace WebApipractica.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Activo")
+                        .HasColumnType("bit");
+
                     b.Property<int>("AlmacenId")
                         .HasColumnType("int");
 
                     b.Property<string>("Codigo")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagenUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MarcaId")
@@ -81,7 +87,13 @@ namespace WebApipractica.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("PrecioMayorista")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockMinimo")
                         .HasColumnType("int");
 
                     b.Property<int>("TipoProductoId")

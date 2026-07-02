@@ -22,6 +22,7 @@ namespace WebApipractica.Controllers
                 .Include(producto => producto.Almacen)
                 .Include(producto => producto.Marca)
                 .Include(producto => producto.TipoProducto)
+                .Where(producto => producto.Activo)
                 .ToListAsync();
 
             var resumenDepositos = productos
@@ -48,22 +49,23 @@ namespace WebApipractica.Controllers
             {
                 TotalProductos = productos.Count,
                 TotalUnidades = productos.Sum(producto => producto.Stock),
+                ValorInventarioMayorista = productos.Sum(producto => producto.Stock * producto.PrecioMayorista),
                 Depositos = resumenDepositos,
                 Categorias = resumenCategorias
             });
         }
 
         [HttpGet("stock-bajo")]
-        public async Task<IActionResult> ObtenerStockBajo([FromQuery] int minimo = 5)
+        public async Task<IActionResult> ObtenerStockBajo([FromQuery] int? minimo = null)
         {
-            if (minimo < 0)
+            if (minimo.HasValue && minimo.Value < 0)
                 return BadRequest("El minimo no puede ser negativo.");
 
             var productos = await _context.Productos
                 .Include(producto => producto.Almacen)
                 .Include(producto => producto.Marca)
                 .Include(producto => producto.TipoProducto)
-                .Where(producto => producto.Stock <= minimo)
+                .Where(producto => producto.Activo && producto.Stock <= (minimo ?? producto.StockMinimo))
                 .OrderBy(producto => producto.Stock)
                 .Select(producto => new
                 {
@@ -71,6 +73,9 @@ namespace WebApipractica.Controllers
                     producto.Codigo,
                     producto.Nombre,
                     producto.Stock,
+                    producto.StockMinimo,
+                    producto.PrecioMayorista,
+                    producto.ImagenUrl,
                     Almacen = producto.Almacen.Nombre,
                     Marca = producto.Marca.Name,
                     TipoProducto = producto.TipoProducto.Nombre

@@ -10,6 +10,13 @@
 
         public required int Stock { get; set; }
 
+        public decimal PrecioMayorista { get; set; }
+
+        public int StockMinimo { get; set; } = 5;
+
+        public string? ImagenUrl { get; set; }
+
+        public bool Activo { get; set; } = true;
 
         // Foreign Keys
         public required int AlmacenId { get; set; }

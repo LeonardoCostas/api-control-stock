@@ -14,6 +14,8 @@ MVP de backend y pagina de presentacion para Zamponi, una empresa mayorista de b
 - Pagina web inicial servida desde `wwwroot`.
 - Panel administrador en `wwwroot/admin.html`.
 - Buscador operativo por codigo, nombre, marca o categoria.
+- Edicion de productos con precio mayorista, stock minimo, imagen y estado activo/inactivo.
+- Catalogo publico dinamico con busqueda comercial.
 - Datos demo para mostrar productos mayoristas sin cargar una base completa.
 - Swagger para probar la API.
 
@@ -27,6 +29,8 @@ MVP de backend y pagina de presentacion para Zamponi, una empresa mayorista de b
 - `GET /api/reportes/resumen`
 - `GET /api/reportes/stock-bajo?minimo=5`
 - `GET /api/productos/buscar?texto=CAD-116`
+- `PUT /api/productos/{id}`
+- `PATCH /api/productos/{id}/desactivar`
 - `POST /api/datos-demo/seed`
 
 ## Ejemplo de entrada de stock
@@ -74,4 +78,5 @@ dotnet run
 - Historial persistente de movimientos con usuario, fecha y comprobante.
 - Imagen por producto y carga por codigo de barras.
 - Pedidos de clientes mayoristas.
+- Consulta directa por WhatsApp desde el catalogo publico.
 - Dashboard con ventas, faltantes y reposicion sugerida.

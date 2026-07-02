@@ -157,6 +157,7 @@ h2 {
 
 .public-link,
 .full-button,
+.secondary-button,
 .search-box button {
     display: inline-flex;
     min-height: 44px;
@@ -166,6 +167,13 @@ h2 {
     color: #06101c;
     background: linear-gradient(135deg, var(--cyan), #8fb7ff, var(--pink));
     border-radius: 999px;
+}
+
+.secondary-button {
+    grid-column: 1 / -1;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--line);
 }
 
 .dashboard {
@@ -332,6 +340,22 @@ td code {
     border-radius: 8px;
 }
 
+.product-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-thumb {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
 .stock-badge {
     display: inline-flex;
     min-width: 54px;
@@ -345,6 +369,25 @@ td code {
 
 .stock-badge.low {
     background: var(--warn);
+}
+
+.row-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-button {
+    min-height: 34px;
+    padding: 0 10px;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+}
+
+.icon-button.danger {
+    color: #ffdbe8;
+    border-color: rgba(255, 92, 168, 0.42);
 }
 
 .activity-list {

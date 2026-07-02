@@ -75,13 +75,19 @@
                     </div>
                 </div>
                 <form class="product-form" id="productForm">
+                    <input name="id" type="hidden">
                     <label>Codigo<input name="codigo" required placeholder="CAR-750-TRA"></label>
                     <label>Nombre<input name="nombre" required placeholder="Caramanola transparente 750 ml"></label>
-                    <label>Stock inicial<input name="stock" required type="number" min="0" value="0"></label>
+                    <label>Stock<input name="stock" required type="number" min="0" value="0"></label>
+                    <label>Stock minimo<input name="stockMinimo" required type="number" min="0" value="5"></label>
+                    <label>Precio mayorista<input name="precioMayorista" required type="number" min="0" step="0.01" value="0"></label>
+                    <label>Imagen URL<input name="imagenUrl" placeholder="https://..."></label>
                     <label>Deposito<select name="almacenId" required></select></label>
                     <label>Marca<select name="marcaId" required></select></label>
                     <label>Categoria<select name="tipoProductoId" required></select></label>
-                    <button class="full-button" type="submit">Guardar producto</button>
+                    <label>Estado<select name="activo"><option value="true">Activo</option><option value="false">Inactivo</option></select></label>
+                    <button class="full-button" id="saveProductButton" type="submit">Guardar producto</button>
+                    <button class="secondary-button" id="cancelEditButton" type="button" hidden>Cancelar edicion</button>
                 </form>
             </article>
         </section>
@@ -110,7 +116,10 @@
                             <th>Categoria</th>
                             <th>Marca</th>
                             <th>Deposito</th>
+                            <th>Precio</th>
+                            <th>Min.</th>
                             <th>Stock</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="productsTable"></tbody>
